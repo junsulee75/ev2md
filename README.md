@@ -20,7 +20,7 @@ Convert Evernote exports (ENEX or HTML ZIP) into Markdown documents.
 Output is `.md` files and an `images/` directory written to the specified output directory.  
 Single file and batch (directory) conversion are both supported.  
 
-Suggestions to: junsu.lee@servicenow.com  
+Suggestions: open an issue at https://github.com/junsulee75/ev2md/issues
 
 [↑ Table of Contents](#table-of-contents)
 
@@ -28,11 +28,19 @@ Suggestions to: junsu.lee@servicenow.com
 
 ## Installation
 
-### Prerequisites
+### Install via script
 
-- Go 1.21 or later: https://go.dev/dl/
+```bash
+curl -s https://raw.githubusercontent.com/junsulee75/ev2md/main/install.sh | bash
+```
+
+Detects OS and architecture automatically and installs to `~/bin/ev2md`.  
 
 ### Build from source
+
+#### Prerequisites
+
+- Go 1.21 or later: https://go.dev/dl/
 
 ```bash
 git clone https://github.com/junsulee75/ev2md.git
