@@ -8,9 +8,6 @@ Convert Evernote exports (ENEX or HTML ZIP) into Markdown documents.
 - [Installation](#installation)
 - [Usage](#usage)
 - [Options](#options)
-- [Processing Pipeline](#processing-pipeline)
-- [Known Pitfalls](#known-pitfalls)
-- [Dependencies](#dependencies)
 
 ---
 
@@ -96,73 +93,5 @@ ev2md -c
 | `-r, --reset` | Clear the output directory before converting. Without `-r`, existing files remain and only converted files are overwritten. |
 | `-c, --clean` | Interactive cleanup for generated working directories/files. |
 | `-h, --help` | Show help. |
-
-[↑ Table of Contents](#table-of-contents)
-
----
-
-## Processing Pipeline
-
-### ENEX input
-
-1. Parse ENEX XML → extract `<note>` elements  
-2. Decode base64 `<resource>` data (images) → build MD5 hash map  
-3. Replace `<en-media hash="...">` with `<img src="images/...">` references  
-4. Convert code blocks (`<div style="--en-codeblock:true">` or `<en-codeblock>`)  
-5. Run shared Markdown pipeline → write `{title}.md`  
-
-### HTML ZIP input
-
-1. Extract ZIP → find `.html` file  
-2. Copy referenced images to `output/images/`  
-3. Run shared Markdown pipeline → write `{title}.md`  
-
-### Shared Markdown pipeline
-
-1. Strip `<style>`, `<script>`, `<meta>`, `<link>` tags  
-2. Convert HTML → Markdown (ATX headings, GFM tables)  
-3. Collapse 3+ blank lines to 2  
-4. Demote headings by 1 level (H1→H2, …)  
-5. Build TOC from H2/H3 headings  
-6. Insert `[contents]` backlinks before each heading  
-7. Prepend `# {title}` and `## Contents` with TOC  
-8. Fix MDX-incompatible autolinks  
-9. Remove escaped chars (`\-` `\*` `\_` `\|`) that render literally in some viewers  
-
-[↑ Table of Contents](#table-of-contents)
-
----
-
-## Known Pitfalls
-
-### `<en-media>` content loss
-
-The Go HTML5 parser treats `<en-media ... />` as a regular opening tag (not self-closing).  
-Content after the tag ends up nested as children and gets dropped on remove/replace.  
-**Fix:** `unwrapChildren()` re-parents children as siblings before every remove/replace on `<en-media>` nodes.  
-
-### HTML table conversion
-
-Evernote wraps table cell content in `<div>` tags, which the HTML5 parser moves out of cells (foster parenting).  
-**Fix:** `preFlattenTableCells()` strips `<div>` wrappers adjacent to `<th>`/`<td>` in the raw HTML string before parsing.  
-Missing `| --- |` separator rows are inserted by `addTableSeparators()` after Markdown conversion.  
-
-### Markdown escape sequences
-
-The `html-to-markdown` library escapes `\-` `\*` `\_` `\|` to prevent misinterpretation.  
-Some viewers (e.g. ServiceNow KB) display these literally instead of stripping the backslash.  
-**Fix:** Escape sequences are removed in a final pass.  
-
-[↑ Table of Contents](#table-of-contents)
-
----
-
-## Dependencies
-
-| Library | Purpose |
-|---------|---------|
-| `github.com/JohannesKaufmann/html-to-markdown v1.6.0` | HTML → Markdown conversion (ATX headings, GFM tables) |
-| `golang.org/x/net` | `html.Parse` for parsing HTML/ENML |
-| stdlib: `archive/zip`, `encoding/xml`, `encoding/base64`, `crypto/md5` | ZIP, XML, ENEX image handling |
 
 [↑ Table of Contents](#table-of-contents)
