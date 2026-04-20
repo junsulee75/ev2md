@@ -1,6 +1,9 @@
 # ev2md
 
-Convert Evernote exports (ENEX or HTML ZIP) into Markdown documents.  
+Convert Evernote exported **ENEX** files into Markdown documents.  
+Supports notes with headings, code blocks, images, and tables.  
+
+![ev2md demo](images/ev2md.gif)  
 
 ## Table of Contents
 
@@ -13,7 +16,7 @@ Convert Evernote exports (ENEX or HTML ZIP) into Markdown documents.
 
 ## Overview
 
-`ev2md` converts Evernote ENEX exports or Evernote HTML ZIP exports into Markdown files with properly managed image assets.  
+`ev2md` converts Evernote exported **ENEX** files into Markdown files with properly managed image assets.  
 Output is `.md` files and an `images/` directory written to the specified output directory.  
 Single file and batch (directory) conversion are both supported.  
 
@@ -68,7 +71,7 @@ ev2md notes/my_note.enex
 # Convert a single ENEX file to a specific output directory
 ev2md notes/my_note.enex -o /tmp/out
 
-# Convert all .enex/.zip files in a directory → written to ./output/
+# Convert all .enex files in a directory → written to ./output/
 ev2md notes/
 
 # Convert all files in a directory with a specific output path
