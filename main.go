@@ -151,7 +151,7 @@ func parseArgs() (inputFiles []string, outputFile string, cleanMode, cpMode, res
 }
 
 func printUsage() {
-	fmt.Printf("ev2md  (build: %s)\n", buildDate)
+	fmt.Printf("ev2md  (build: %s)  by Jun Su Lee\n", buildDate)
 	fmt.Println()
 	fmt.Println("Usage:")
 	fmt.Println("  ev2md <input.enex> [-o output_dir] [-r]")
